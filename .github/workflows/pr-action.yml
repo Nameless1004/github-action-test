@@ -9,9 +9,9 @@ name: Java CI with Gradle
 
 on:
     push:
-      branches: ["main"]
-  # pull_request:
-  #   branches: [ "main" ]
+        branches: ["main"]
+    pull_request:
+        branches: [ "main" ]
 
 jobs:
   build:
@@ -38,6 +38,7 @@ jobs:
       run: ./gradlew --info test
 
     - name: Test Coverage Report
+        id: jacoco
         uses: madrapps/jacoco-report@v1.7.1
         with:
             title: Test Coverage Report
