@@ -3,7 +3,6 @@ plugins {
     id 'org.springframework.boot' version '3.3.4'
     id 'io.spring.dependency-management' version '1.1.6'
     id 'jacoco'
-    id "org.sonarqube" version "5.1.0.4882"
 }
 
 group = 'com'
@@ -25,112 +24,64 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-def QDomains = []
-for (qPattern in '*.QA'..'*.QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
-    QDomains.add(qPattern + '*')
-}
-def jacocoExcludePatterns = [
-        // 측정 안하고 싶은 패턴
-        "**/*Application*",
-        "**/*Config*",
-        "**/*Exception*",
-        "**/*Request*",
-        "**/*Response*",
-        "**/*Dto*",
-        "**/*Interceptor*",
-        "**/*Filter*",
-        "**/*Resolver*",
-        "**/*Entity*",
-        "**/test/**",
-        "**/resources/**"
-]
-def jacocoDir = layout.buildDirectory.dir("reports/jacoco")
-sonar {
-    properties {
-        property "sonar.projectKey", "Nameless1004_github-action-test"
-        property "sonar.organization", "nameless1004"
-        property "sonar.host.url", "https://sonarcloud.io"
-        property 'sonar.sources', 'src'
-        property 'sonar.language', 'java'
-        property 'sonar.sourceEncoding', 'UTF-8'
-        property 'sonar.test.exclusions', jacocoExcludePatterns.join(',')
-        property 'sonar.test.inclusions', '**/*Test.java'
-        property 'sonar.coverage.jacoco.xmlReportPaths', jacocoDir.get().file("jacoco.xml").asFile
-    }
-}
 
 tasks.named('test') {
-    useJUnitPlatform()
+    useJUnitPlatform()//, jacocoTestCoverageVerification
     finalizedBy jacocoTestReport
 }
+
+tasks.register('testAndGenerateReport') {
+    group 'verification'
+    description 'test w/ jacoco'
+
+    dependsOn test, jacocoTestReport, jacocoTestCoverageVerification
+
+    tasks.jacocoTestReport.mustRunAfter tasks.test
+    tasks.jacocoTestCoverageVerification.mustRunAfter tasks.jacocoTestReport
+}
+
 
 jacoco {
     toolVersion = "0.8.12"
 }
 
 jacocoTestReport {
-    dependsOn test	// 테스트가 수행되어야만 report를 생성할 수 있도록 설정
+    dependsOn test
     reports {
-        html.required.set(true)
-        xml.required.set(true)
-        csv.required.set(true)
-        html.destination jacocoDir.get().file("jacoco.html").asFile
-        xml.destination jacocoDir.get().file("jacoco.xml").asFile
-        csv.destination jacocoDir.get().file("jacoco.csv").asFile
+        xml.required = true
+        html.required = true
+        csv.required = false
     }
 
-    afterEvaluate {
-        classDirectories.setFrom(
-                files(classDirectories.files.collect {
-                    fileTree(dir: it, excludes: jacocoExcludePatterns + QDomains) // Querydsl 관련 제거
-                })
-        )
-    }
     finalizedBy jacocoTestCoverageVerification
 }
 
 jacocoTestCoverageVerification {
+
+    enabled = true
+
+
     violationRules {
-//        rule {
-//            // 'element'가 없으면 프로젝트의 전체 파일을 합친 값을 기준으로 합니다.
-//            // 위의 리포트에서 'Total'로 표시된 부분입니다.
-//            limit {
-//                // 'counter'를 지정하지 않으면 default는 'INSTRUCTION'
-//                // 'value'를 지정하지 않으면 default는 'COVEREDRATIO'
-//                minimum = 0.30
-//            }
-//        }
-
-        // 여러 룰을 생성할 수 있습니다.
         rule {
-            // 룰을 간단히 켜고 끌 수 있습니다.
-            enabled = true
-
-            // 룰을 체크할 단위는 클래스 단위
+            // 클래스 단위로 룰 체크
             element = 'CLASS'
 
-            // 브랜치 커버리지를 최소한 90% 만족시켜야 합니다.
-//            limit {
-//                counter = 'BRANCH'
-//                value = 'COVEREDRATIO'
-//                minimum = 0.30
-//            }
-
-            // 라인 커버리지를 최소한 80% 만족시켜야 합니다.
             limit {
                 counter = 'LINE'
                 value = 'COVEREDRATIO'
-                minimum = 0.30
+                minimum = 0.5
             }
 
-            // 빈 줄을 제외한 코드의 라인수를 최대 200라인으로 제한합니다.
-            limit {
-                counter = 'LINE'
-                value = 'TOTALCOUNT'
-                maximum = 200
-            }
-
-            excludes = jacocoExcludePatterns + QDomains
+            // 마찬가지로 제거 대상 지정
+            excludes = [
+                    "**.*Application*",
+                    "**.*Config*",
+                    "**.*Dto*",
+                    "**.*Request*",
+                    "**.*Response*",
+                    "**.*Interceptor*",
+                    "**.*Exception*"
+            ]
         }
     }
 }

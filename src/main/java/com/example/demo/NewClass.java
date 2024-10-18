@@ -6,7 +6,10 @@ public class NewClass {
         System.out.println("test");
     }
 
-    public String test2() {
+    private String test(int a) {
+        if(a > 10) {
+            return "";
+        }
         return "zzz";
     }
 }
