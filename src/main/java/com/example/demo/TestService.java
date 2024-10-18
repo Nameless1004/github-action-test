@@ -14,5 +14,12 @@ public class TestService {
         return a * b;
     }
 
+    public int div(int a, int b) {
+        if(b == 0 || a == 0) {
+            throw new IllegalArgumentException("z");
+        }
+
+        return a / b;
+    }
 
 }
