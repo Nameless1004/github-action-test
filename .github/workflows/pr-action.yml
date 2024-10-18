@@ -54,7 +54,7 @@ jobs:
       - name: pull-request-test-failure-slack-notice
         uses: 8398a7/action-slack@v3
         with:
-          status: custom
+          status: ${{ job.status }}
           fields: repo,message,commit,author,action,eventName,ref,workflow
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_GIT_WEBHOOK_URL}}
