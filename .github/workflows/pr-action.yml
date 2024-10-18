@@ -38,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-html-report
-          path: ${{ github.workspace }}/**/build/jacoco/test/html
+          path: ${{ github.workspace }}/build/jacoco/test/html
       - name: Get the Coverage info
         run: |
           echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
