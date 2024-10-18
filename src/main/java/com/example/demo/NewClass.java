@@ -6,10 +6,7 @@ public class NewClass {
         System.out.println("test");
     }
 
-    private String test(int a) {
-        if(a > 10 && a > 5) {
-            return "";
-        }
+    public String test(int a) {
         return "zzz";
     }
 }
