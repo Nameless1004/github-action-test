@@ -48,7 +48,7 @@ jobs:
         uses: madrapps/jacoco-report@v1.7.1
         with:
           title: Test Coverage Report
-          paths: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
+          paths: ${{ github.workspace }}/build/reports/jacoco/index.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 50
           min-coverage-changed-files: 50
@@ -58,7 +58,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-html-report
-          path: ${{ github.workspace }}/build/reports/jacoco/test/html
+          path: ${{ github.workspace }}/build/reports/jacoco/index.html
 
       - name: pull-request-test-success-slack-notice
         uses: 8398a7/action-slack@v3
