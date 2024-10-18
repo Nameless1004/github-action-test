@@ -47,7 +47,9 @@ jacoco {
 jacocoTestReport {
     dependsOn test
     reports {
-        xml.required.set(true)
+        xml.required = true
+        html.required = true
+        csv.required = false
     }
 
     finalizedBy jacocoTestCoverageVerification
@@ -57,12 +59,6 @@ jacocoTestCoverageVerification {
 
     enabled = true
 
-    // QueryDSL QDomain 제외시키기
-    def QDomains = []
-    // qPattern = "*.QA","*.QB","*.QC", ... "*.QZ"
-    for (qPattern in '*.QA'..'*.QZ') {
-        QDomains.add(qPattern + '*')
-    }
 
     violationRules {
         rule {
@@ -84,7 +80,7 @@ jacocoTestCoverageVerification {
                     "**.*Response*",
                     "**.*Interceptor*",
                     "**.*Exception*"
-            ] + QDomains
+            ]
         }
     }
 }
