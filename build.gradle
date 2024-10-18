@@ -34,15 +34,12 @@ jacocoTestCoverageVerification {
 
     violationRules {
         rule {
-            // rule 활성화
-            enabled = true
-
             // 클래스 단위로 룰 체크
             element = 'CLASS'
 
             // 라인 커버리지를 최소 80% 만족
             limit {
-                counter = 'LINE'
+                counter = 'INSTRUCTION'
                 value = 'COVEREDRATIO'
                 minimum = 0.8
             }
@@ -63,7 +60,7 @@ jacocoTestCoverageVerification {
 
 tasks.named('test') {
     useJUnitPlatform()
-    finalizedBy jacocoTestReport
+    finalizedBy jacocoTestReport, jacocoTestCoverageVerification
 }
 
 jacoco {
