@@ -1,0 +1,53 @@
+name: Measure coverage
+
+on:
+  push:
+      branches: ["main", "dev"]
+env:
+  AWS_REGION: AWS REGION
+  ECR_REGISTRY: ECR REPOSITORY URI
+  ECR_REPOSITORY: ECR REPOSITORY NAME
+  EC2_IP_ADDRESS: EC2 IP ADDRESS
+  
+jobs:
+  deploy:
+    name: Deploy
+    environment: production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'temurin'
+
+      - name: chmod gradle
+        run: chmod +x gradlew
+
+      - name: Docker Login
+        uses: docker/login-action@v3.3.0
+        with:
+          # Username used to log against the Docker registry
+          username: ${{secrets.DOCKER_NAME}}
+          password: ${{secrets.DOCKER_PASSWORD}}
+
+                
+     
+      - name: pull-request-test-success-slack-notice
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_GIT_WEBHOOK_URL}}
+        if: success()
+
+      - name: pull-request-test-failure-slack-notice
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_GIT_WEBHOOK_URL}}
+        if: failure()
