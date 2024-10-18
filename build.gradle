@@ -27,9 +27,10 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()//, jacocoTestCoverageVerification
+    finalizedBy jacocoTestReport
 }
 
-task testAndGenerateReport {
+tasks.register('testAndGenerateReport') {
     group 'verification'
     description 'test w/ jacoco'
 
@@ -41,7 +42,7 @@ task testAndGenerateReport {
 
 
 jacoco {
-    toolVersion = "0.8.12"
+    toolVersion = "0.8.11"
 }
 
 jacocoTestReport {
