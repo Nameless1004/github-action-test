@@ -41,6 +41,7 @@ jobs:
           name: jacoco-html-report
           path: ${{ github.workspace }}/build/reports/jacoco/test/html
       - name: Get the Coverage info
+        if: always()
         run: |
           echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
           echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
