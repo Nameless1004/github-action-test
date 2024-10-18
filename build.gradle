@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.3.4'
     id 'io.spring.dependency-management' version '1.1.6'
     id 'jacoco'
+    id "org.sonarqube" version "5.1.0.4882"
 }
 
 group = 'com'
@@ -24,10 +25,16 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+sonar {
+    properties {
+        property "sonar.projectKey", "Nameless1004_github-action-test"
+        property "sonar.organization", "nameless1004"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
 
 tasks.named('test') {
-    useJUnitPlatform()//, jacocoTestCoverageVerification
-    finalizedBy jacocoTestReport
+    useJUnitPlatform()
 }
 
 tasks.register('testAndGenerateReport') {
@@ -53,7 +60,6 @@ jacocoTestReport {
         csv.required = false
     }
 
-    finalizedBy jacocoTestCoverageVerification
 }
 
 jacocoTestCoverageVerification {
