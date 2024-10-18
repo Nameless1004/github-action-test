@@ -24,12 +24,9 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
-}
-
 test {
     finalizedBy jacocoTestReport
+    useJUnitPlatform()
 }
 
 jacoco {
