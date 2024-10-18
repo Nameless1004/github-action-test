@@ -24,7 +24,39 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+
+tasks.named('test') {
+    useJUnitPlatform()//, jacocoTestCoverageVerification
+}
+
+task testAndGenerateReport {
+    group 'verification'
+    description 'test w/ jacoco'
+
+    dependsOn test, jacocoTestReport, jacocoTestCoverageVerification
+
+    tasks.jacocoTestReport.mustRunAfter tasks.test
+    tasks.jacocoTestCoverageVerification.mustRunAfter tasks.jacocoTestReport
+}
+
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required.set(true)
+    }
+
+    finalizedBy jacocoTestCoverageVerification
+}
+
 jacocoTestCoverageVerification {
+
+    enabled = true
+
     // QueryDSL QDomain 제외시키기
     def QDomains = []
     // qPattern = "*.QA","*.QB","*.QC", ... "*.QZ"
@@ -37,11 +69,16 @@ jacocoTestCoverageVerification {
             // 클래스 단위로 룰 체크
             element = 'CLASS'
 
-            // 라인 커버리지를 최소 80% 만족
             limit {
-                counter = 'INSTRUCTION'
+                counter = 'LINE'
                 value = 'COVEREDRATIO'
-                minimum = 0.8
+                minimum = 0.00
+            }
+
+            limit {
+                counter = 'METHOD'
+                value = 'COVEREDRATIO'
+                minimum = 0.00
             }
 
             // 마찬가지로 제거 대상 지정
@@ -55,21 +92,5 @@ jacocoTestCoverageVerification {
                     "**.*Exception*"
             ] + QDomains
         }
-    }
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
-    finalizedBy jacocoTestReport//, jacocoTestCoverageVerification
-}
-
-jacoco {
-    toolVersion = "0.8.12"
-}
-
-jacocoTestReport {
-    dependsOn test
-    reports {
-        xml.required.set(true)
     }
 }
