@@ -10,7 +10,7 @@ class NewClassTest {
     @Test
     public void tt() throws Exception {
         // given
-        int a= 10;
+        int a = 20;
         newClass.test();
         String test = newClass.test2();
         System.out.println("test = " + test);
