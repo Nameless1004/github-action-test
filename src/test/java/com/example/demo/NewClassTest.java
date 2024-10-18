@@ -11,7 +11,7 @@ class NewClassTest {
     public void tt() throws Exception {
         // given
         newClass.test();
-        String test = newClass.test(5);
+        String test = newClass.test2();
         System.out.println("test = " + test);
         // when
 
