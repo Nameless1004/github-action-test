@@ -6,4 +6,7 @@ public class MyClass {
         return "";
     }
 
+    public String method2() {
+        return "zzzz";
+    }
 }
