@@ -12,7 +12,7 @@ class NewClassTest {
         // given
         int a = 20;
         newClass.test();
-        String test = newClass.test2();
+        String test = newClass.test2(1);
         System.out.println("test = " + test);
         // when
 

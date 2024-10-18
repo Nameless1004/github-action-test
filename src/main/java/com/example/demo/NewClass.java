@@ -6,7 +6,7 @@ public class NewClass {
         System.out.println("test");
     }
 
-    public String test2() {
+    public String test2(int b) {
         return "zzz";
     }
 }
