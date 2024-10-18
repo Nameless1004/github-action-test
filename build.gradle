@@ -44,6 +44,7 @@ def jacocoExcludePatterns = [
         "**/test/**",
         "**/resources/**"
 ]
+def jacocoDir = layout.buildDirectory.dir("reports/")
 sonar {
     properties {
         property "sonar.projectKey", "Nameless1004_github-action-test"
@@ -67,8 +68,6 @@ tasks.named('test') {
 jacoco {
     toolVersion = "0.8.12"
 }
-
-def jacocoDir = layout.buildDirectory.dir("reports/")
 
 jacocoTestReport {
     dependsOn test	// 테스트가 수행되어야만 report를 생성할 수 있도록 설정
