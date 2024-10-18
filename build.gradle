@@ -56,7 +56,7 @@ sonar {
         property 'sonar.test.exclusions', jacocoExcludePatterns.join(',')
         property 'sonar.test.inclusions', '**/*Test.java'
         property 'sonar.java.coveragePlugin', 'jacoco'
-        property 'sonar.coverage.jacoco.xmlReportPaths', jacocoDir.get().file("index.xml").asFile
+        property 'sonar.coverage.jacoco.xmlReportPaths', jacocoDir.get().file("jacocoTestReport.xml").asFile
     }
 }
 
@@ -75,9 +75,9 @@ jacocoTestReport {
         html.required.set(true)
         xml.required.set(true)
         csv.required.set(true)
-        html.destination jacocoDir.get().file("index.html").asFile
-        xml.destination jacocoDir.get().file("index.xml").asFile
-        csv.destination jacocoDir.get().file("index.csv").asFile
+        html.destination jacocoDir.get().file("jacocoTestReport.html").asFile
+        xml.destination jacocoDir.get().file("jacocoTestReport.xml").asFile
+        csv.destination jacocoDir.get().file("jacocoTestReport.csv").asFile
     }
 
     afterEvaluate {
