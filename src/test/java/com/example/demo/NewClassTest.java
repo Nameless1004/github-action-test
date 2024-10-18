@@ -11,7 +11,6 @@ class NewClassTest {
     public void tt() throws Exception {
         // given
         int a = 20;
-        int b = 30;
         newClass.test();
         String test = newClass.test2();
         System.out.println("test = " + test);
