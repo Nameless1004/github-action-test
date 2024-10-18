@@ -5,7 +5,7 @@ on:
       branches: ["main"]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -15,7 +15,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 17
-          distribution: 'temurin'
+          distribution: 'adopt'
 
       - name: chmod gradle
         run: chmod +x gradlew
