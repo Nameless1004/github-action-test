@@ -32,10 +32,19 @@ jobs:
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
-    - name: chmode gradlew
+    - name: gradlew premission
       run: chmod +x ./gradlew
-    - name: Build with Gradle Wrapper
-      run: ./gradlew test
+    - name: Test with gradle
+      run: ./gradlew --info test
+
+    - name: Test Coverage Report
+        uses: madrapps/jacoco-report@v1.7.1
+        with:
+            title: Test Coverage Report
+            paths: ${{github.workspace}}/build/reports/jacoco/test/jacocoTestReport.xml
+            token: ${{secrets.GITHUB_TOKEN}}
+            min-coverage-overall: 30
+            min-coverage-cnaged-files: 50
 
   dependency-submission:
 
